@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Organisers who may change teams, fixtures and settings.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email.lower() in ['dallen.olson@gmail.com'];
+    }
+    // Any login you created in Firebase Authentication (sign-up is switched off).
+    function isReferee() {
+      return request.auth != null;
+    }
+
+    // Everyone can read; only organisers can change the setup.
+    match /setup/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    // Game status (live / final): readable by all, written by referees.
+    match /games/{gameId} {
+      allow read: if true;
+      allow write: if isReferee();
+    }
+    // Scoring entries (touchdowns, conversions, interceptions).
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if isReferee()
+        && request.resource.data.keys().hasAll(['gameId', 'side', 'type', 'pts', 'ts'])
+        && request.resource.data.type in ['td', 'pat1', 'pat2', 'int']
+        && request.resource.data.side in ['A', 'B'];
+      allow delete: if isReferee();
+      allow update: if isAdmin();
+    }
+    // Nothing else is readable or writable.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
