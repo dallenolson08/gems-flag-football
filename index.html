@@ -33,13 +33,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top .wrap{padding-block:16px 14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
 .brand{display:flex;align-items:center;gap:12px;flex:none}
 .brand .lg49{height:58px;width:auto;display:block}
-.brand .x{font:700 22px/1 var(--font-d);color:var(--flag)}
-.brand .gemsimg{height:46px;width:auto;display:block;background:#fff;border-radius:6px;padding:4px 8px}
+.brand .x{width:2px;height:40px;background:rgba(255,255,255,.75);border-radius:1px}
+.brand .gemsimg{height:44px;width:auto;display:block}
 .brand .gems{font:800 30px/.9 var(--font-d);letter-spacing:.04em;color:#fff;display:flex;flex-direction:column}
 .brand .gems small{font:700 10px/1 var(--font-b);letter-spacing:.22em;text-transform:uppercase;color:var(--flag);margin-top:4px}
 .ttl{flex:1;min-width:220px}
 .eyebrow{font:700 12px/1 var(--font-b);letter-spacing:.2em;text-transform:uppercase;color:var(--flag);margin-bottom:6px}
-@media (max-width:520px){.brand .lg49{height:44px}.brand .gems{font-size:24px}.brand .gemsimg{height:36px}}
+@media (max-width:520px){.brand .lg49{height:44px}.brand .gems{font-size:24px}.brand .gemsimg{height:34px}.brand .x{height:32px}}
 .top h1{font-family:var(--font-d);font-weight:800;font-size:clamp(26px,5vw,38px);line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
 .top .sub{font-size:13px;opacity:.85;margin-top:4px}
 .conn{font-size:12px;display:flex;align-items:center;gap:6px;opacity:.9}
@@ -176,7 +176,7 @@ body{margin:0}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <div class="brand"><img class="lg49" src="assets/49ers-logo.png" alt="San Francisco 49ers"><span class="x" aria-hidden="true">×</span><img class="gemsimg" src="assets/gems-logo.png" alt="GEMS Education" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="gems" hidden>GEMS<small>Education</small></span></div>
+  <div class="brand"><img class="lg49" src="assets/49ers-logo.png" alt="San Francisco 49ers"><span class="x" aria-hidden="true"></span><img class="gemsimg" src="assets/gems-logo.png" alt="GEMS Education" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="gems" hidden>GEMS<small>Education</small></span></div>
   <div class="ttl"><div class="eyebrow">Flag Football · U13 &amp; U15</div><h1 id="evName">GEMS Champions Trophy</h1><div class="sub" id="evSub">Live scores, tables and playoffs</div></div>
   <div class="conn" id="conn"><span class="dot"></span><span>Connecting…</span></div>
 </div></header>
@@ -201,7 +201,7 @@ const TYPES={
   int:{label:"Interception",btn:"INT",key:null}
 };
 function defaultCfg(){return{
-  event:{name:"GEMS Champions Trophy",date:"",venue:""},
+  event:{name:"GEMS Champions Trophy",date:"2026-12-08",venue:"GEMS World Academy, Dubai"},
   points:{win:3,draw:1,loss:0},
   scoring:{td:6,pat1:1,pat2:2},
   referees:[],assign:{},
