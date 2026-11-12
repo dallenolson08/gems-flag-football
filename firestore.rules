@@ -5,7 +5,7 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null
         && request.auth.token.email != null
-        && request.auth.token.email.lower() in ['dallen.olson@gmail.com'];
+        && request.auth.token.email.lower() in ['dallen.olson@gmail.com', 'gems-claude@gemsclaude.com'];
     }
     // Any login you created in Firebase Authentication (sign-up is switched off).
     function isReferee() {

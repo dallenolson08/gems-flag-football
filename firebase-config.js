@@ -10,5 +10,5 @@ window.FF_CONFIG = {
     appId: "1:848333855721:web:3412142fb2e3a7010f0978"
   },
   // Logins listed here see the Setup tab. They must also be listed in firestore.rules.
-  admins: ["dallen.olson@gmail.com"]
+  admins: ["dallen.olson@gmail.com", "gems-claude@gemsclaude.com"]
 };
