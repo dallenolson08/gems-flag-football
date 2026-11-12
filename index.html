@@ -3,33 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GEMS Flag Football Live</title>
-<meta name="description" content="Live scores, standings, playoffs and top scorers for the GEMS flag football tournament.">
+<title>GEMS Champions Trophy Live</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="theme-color" content="#A40001">
+<meta name="description" content="Live scores, standings, playoffs and top scorers for the GEMS Champions Trophy flag football tournament, presented by GEMS Education and the San Francisco 49ers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: pitch-green scoreboard band on top, sticky tab bar, one column of cards below; referee console is a full-width phone-first panel */
+/* Layout: 49ers-red scoreboard band with the partner marks, black tab bar with a gold active tab, one column of cards below; referee console is a full-width phone-first panel */
 :root{
-  --bg:#F3F5F1; --surface:#FFFFFF; --sunk:#E9EEE8; --ink:#15211B; --muted:#5D6B63; --line:#D8E0D9;
-  --pitch:#0F5B3B; --pitch-2:#0B4A30; --on-pitch:#FFFFFF; --flag:#F2B705; --on-flag:#2A1F00;
-  --live:#D63F2A; --good:#E1F0E5; --good-ink:#165C36;
+  --bg:#F6F3EE; --surface:#FFFFFF; --sunk:#EFE9DF; --ink:#1A1414; --muted:#6B5F57; --line:#E3DACD;
+  --pitch:#AA0000; --pitch-2:#151212; --band:#A40001; --on-pitch:#FFFFFF; --flag:#B3995D; --on-flag:#1A1414;
+  --live:#C8102E; --good:#F4EDDD; --good-ink:#7A6331;
   --font-d:'Barlow Condensed','Arial Narrow',Arial,sans-serif; --font-b:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1511; --surface:#16201A; --sunk:#1D2922; --ink:#E6EEE8; --muted:#9BAAA1; --line:#2A3830;
-  --pitch:#13563A; --pitch-2:#0E4430; --on-pitch:#F3FFF7; --flag:#F4C233; --on-flag:#221900;
-  --live:#FF6A53; --good:#173426; --good-ink:#8FDDAE; color-scheme:dark}}
+  --bg:#121010; --surface:#1C1818; --sunk:#262020; --ink:#F2ECE6; --muted:#AA9E94; --line:#352D2B;
+  --pitch:#C21A1A; --pitch-2:#0A0909; --band:#A40001; --on-pitch:#FFFFFF; --flag:#C9AE6E; --on-flag:#1A1414;
+  --live:#FF4D3D; --good:#2A2418; --good-ink:#DCC48E; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E1511; --surface:#16201A; --sunk:#1D2922; --ink:#E6EEE8; --muted:#9BAAA1; --line:#2A3830;
-  --pitch:#13563A; --pitch-2:#0E4430; --on-pitch:#F3FFF7; --flag:#F4C233; --on-flag:#221900;
-  --live:#FF6A53; --good:#173426; --good-ink:#8FDDAE; color-scheme:dark}
+  --bg:#121010; --surface:#1C1818; --sunk:#262020; --ink:#F2ECE6; --muted:#AA9E94; --line:#352D2B;
+  --pitch:#C21A1A; --pitch-2:#0A0909; --band:#A40001; --on-pitch:#FFFFFF; --flag:#C9AE6E; --on-flag:#1A1414;
+  --live:#FF4D3D; --good:#2A2418; --good-ink:#DCC48E; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:15px;line-height:1.45}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--pitch-2)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--band)}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.top{background:var(--pitch);color:var(--on-pitch);
-  background-image:repeating-linear-gradient(90deg,transparent 0 79px,rgba(255,255,255,.07) 79px 81px)}
-.top .wrap{padding-block:18px 16px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:flex-end;justify-content:space-between}
+.top{background:var(--band);color:var(--on-pitch);border-bottom:4px solid var(--flag)}
+.top .wrap{padding-block:16px 14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.brand{display:flex;align-items:center;gap:12px;flex:none}
+.brand .lg49{height:58px;width:auto;display:block}
+.brand .x{font:700 22px/1 var(--font-d);color:var(--flag)}
+.brand .gemsimg{height:46px;width:auto;display:block;background:#fff;border-radius:6px;padding:4px 8px}
+.brand .gems{font:800 30px/.9 var(--font-d);letter-spacing:.04em;color:#fff;display:flex;flex-direction:column}
+.brand .gems small{font:700 10px/1 var(--font-b);letter-spacing:.22em;text-transform:uppercase;color:var(--flag);margin-top:4px}
+.ttl{flex:1;min-width:220px}
+.eyebrow{font:700 12px/1 var(--font-b);letter-spacing:.2em;text-transform:uppercase;color:var(--flag);margin-bottom:6px}
+@media (max-width:520px){.brand .lg49{height:44px}.brand .gems{font-size:24px}.brand .gemsimg{height:36px}}
 .top h1{font-family:var(--font-d);font-weight:800;font-size:clamp(26px,5vw,38px);line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
 .top .sub{font-size:13px;opacity:.85;margin-top:4px}
 .conn{font-size:12px;display:flex;align-items:center;gap:6px;opacity:.9}
@@ -39,6 +49,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tab{appearance:none;border:0;background:transparent;color:var(--on-pitch);opacity:.75;font:700 16px/1 var(--font-d);text-transform:uppercase;letter-spacing:.06em;padding:13px 14px;cursor:pointer;white-space:nowrap}
 .tab[aria-current="page"]{opacity:1;background:var(--flag);color:var(--on-flag)}
+.tabs{border-bottom-width:0}
 .tab:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 main{padding-block:18px 60px;display:flex;flex-direction:column;gap:18px}
 h2{font-family:var(--font-d);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin:0}
@@ -165,7 +176,8 @@ body{margin:0}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <div><h1 id="evName">GEMS Flag Football</h1><div class="sub" id="evSub">Live scores, tables and playoffs</div></div>
+  <div class="brand"><img class="lg49" src="assets/49ers-logo.png" alt="San Francisco 49ers"><span class="x" aria-hidden="true">×</span><img class="gemsimg" src="assets/gems-logo.png" alt="GEMS Education" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="gems" hidden>GEMS<small>Education</small></span></div>
+  <div class="ttl"><div class="eyebrow">Flag Football · U13 &amp; U15</div><h1 id="evName">GEMS Champions Trophy</h1><div class="sub" id="evSub">Live scores, tables and playoffs</div></div>
   <div class="conn" id="conn"><span class="dot"></span><span>Connecting…</span></div>
 </div></header>
 <nav class="tabs" aria-label="Sections"><div class="wrap" id="tabs"></div></nav>
@@ -189,7 +201,7 @@ const TYPES={
   int:{label:"Interception",btn:"INT",key:null}
 };
 function defaultCfg(){return{
-  event:{name:"GEMS Flag Football Tournament",date:"",venue:""},
+  event:{name:"GEMS Champions Trophy",date:"",venue:""},
   points:{win:3,draw:1,loss:0},
   scoring:{td:6,pat1:1,pat2:2},
   referees:[],assign:{},
@@ -272,7 +284,7 @@ function rosterFor(gi,teamName){const t=(cfg().grades[gi].teams||[]).find(t=>t.n
 
 /* ---------- rendering ---------- */
 function renderHeader(){const c=cfg();
-  $("#evName").textContent=c.event.name||"GEMS Flag Football";
+  $("#evName").textContent=c.event.name||"GEMS Champions Trophy";
   let sub=[];if(c.event.date){const d=new Date(c.event.date+"T00:00");if(!isNaN(d))sub.push(d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"}))}
   if(c.event.venue)sub.push(c.event.venue);$("#evSub").textContent=sub.join(" · ")||"Live scores, tables and playoffs";
   const conn=$("#conn");const map={connecting:["","Connecting…"],live:["on","Live"],slow:["","Can't reach scores yet"],off:["","Site not connected yet"]};
