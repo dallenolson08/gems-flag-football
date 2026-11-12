@@ -52,6 +52,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tab{appearance:none;border:0;background:transparent;color:var(--on-pitch);opacity:.75;font:700 16px/1 var(--font-d);text-transform:uppercase;letter-spacing:.06em;padding:13px 14px;cursor:pointer;white-space:nowrap}
 .tab[aria-current="page"]{opacity:1;background:var(--flag);color:var(--on-flag)}
 .tabs{border-bottom-width:0}
+.tab .ts{display:none}
+.sm{display:none;font-weight:400}
+@media (max-width:620px){
+  .tabs .wrap{padding-left:0;padding-right:0;gap:0}
+  .tab{flex:1 1 0;min-width:0;padding:13px 4px;font-size:15px;letter-spacing:.03em;text-align:center}
+  .tab .tl{display:none}.tab .ts{display:inline}
+  input,select,textarea{font-size:16px}
+  .card{padding:14px 12px}
+  th{padding:7px 3px;font-size:10.5px;letter-spacing:.03em}
+  td{padding:8px 3px;font-size:13.5px}
+  td.team{min-width:0;white-space:normal;overflow-wrap:anywhere}
+  .tablewrap{margin:0 -2px}
+  .hm{display:none}
+  .sm{display:block}
+}
 .tab:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 main{padding-block:18px 60px;display:flex;flex-direction:column;gap:18px}
 h2{font-family:var(--font-d);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin:0}
@@ -293,7 +308,8 @@ function renderHeader(){const c=cfg();
   const conn=$("#conn");const map={connecting:["","Connecting…"],live:["on","Live"],slow:["","Can't reach scores yet"],off:["","Site not connected yet"]};
   const [cls,txt]=map[S.state]||map.connecting;conn.innerHTML='<span class="dot '+cls+'"></span><span>'+esc(txt)+'</span>';
   const tabs=[["live","Scores & Tables"],["scorers","Top Scorers"],["ref",S.authUser?"Referee":"Referee login"]];if(S.isAdmin)tabs.push(["setup","Setup"]);
-  $("#tabs").innerHTML=tabs.map(([k,l])=>'<button class="tab" data-act="view" data-v="'+k+'"'+(S.view===k?' aria-current="page"':'')+'>'+l+'</button>').join("")}
+  const short={live:"Scores",scorers:"Top Scorers",ref:S.authUser?"Referee":"Referee",setup:"Setup"};
+  $("#tabs").innerHTML=tabs.map(([k,l])=>'<button class="tab" data-act="view" data-v="'+k+'"'+(S.view===k?' aria-current="page"':'')+'><span class="tl">'+l+'</span><span class="ts" aria-hidden="true">'+short[k]+'</span></button>').join("")}
 function render(force){renderHeader();
   if(S.view==="setup"&&!S.isAdmin)S.view="live";
   if(S.view==="setup"&&S.dirty&&!force)return;
@@ -329,8 +345,8 @@ function viewLive(){const c=cfg();
   // standings
   out+='<section class="card stack"><h2>Standings</h2>';
   Object.keys(M.standings).forEach(p=>{const q=M.two?2:4;
-    out+=(M.two?'<h3>Pool '+p+'</h3>':'')+'<div class="tablewrap"><table><thead><tr><th>#</th><th class="l">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>PF</th><th>PA</th><th>PD</th><th>Pts</th></tr></thead><tbody>'+
-    M.standings[p].map((r,i)=>'<tr class="'+(i<q?"q":"")+'"><td>'+(i+1)+'</td><td class="l team">'+esc(r.name)+'</td><td>'+r.p+'</td><td>'+r.w+'</td><td>'+r.d+'</td><td>'+r.l+'</td><td>'+r.pf+'</td><td>'+r.pa+'</td><td>'+((r.pf-r.pa)>0?"+":"")+(r.pf-r.pa)+'</td><td class="pts">'+r.pts+'</td></tr>').join("")+'</tbody></table></div>'});
+    out+=(M.two?'<h3>Pool '+p+'</h3>':'')+'<div class="tablewrap"><table><thead><tr><th>#</th><th class="l">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th class="hm">PF</th><th class="hm">PA</th><th>PD</th><th>Pts</th></tr></thead><tbody>'+
+    M.standings[p].map((r,i)=>'<tr class="'+(i<q?"q":"")+'"><td>'+(i+1)+'</td><td class="l team">'+esc(r.name)+'</td><td>'+r.p+'</td><td>'+r.w+'</td><td>'+r.d+'</td><td>'+r.l+'</td><td class="hm">'+r.pf+'</td><td class="hm">'+r.pa+'</td><td>'+((r.pf-r.pa)>0?"+":"")+(r.pf-r.pa)+'</td><td class="pts">'+r.pts+'</td></tr>').join("")+'</tbody></table></div>'});
   out+='<div class="small muted">Only final games count. Ranked by points, then point difference, then points scored. Shaded teams are in a semi-final spot.</div></section>';
   // playoffs
   const [sf1,sf2,third,fin]=M.po;
@@ -359,8 +375,8 @@ function viewScorers(){const c=cfg();const gname=k=>(c.grades.find(g=>g.key===k)
   const tdRows=rows.filter(r=>r.td>0).sort((a,b)=>(b.td-a.td)||(b.pts-a.pts));
   const ptRows=rows.filter(r=>r.pts>0).sort((a,b)=>(b.pts-a.pts)||(b.td-a.td));
   const intRows=rows.filter(r=>r.int>0).sort((a,b)=>b.int-a.int);
-  const tbl=(list,cols,empty)=>list.length?'<div class="tablewrap"><table><thead><tr><th>#</th><th class="l">Player</th><th class="l">Team</th>'+(S.scorerGrade==="all"?'<th class="l">Grade</th>':'')+cols.map(c=>'<th>'+c[0]+'</th>').join("")+'</tr></thead><tbody>'+
-    list.slice(0,25).map((r,i)=>'<tr><td>'+(i+1)+'</td><td class="l team">'+(r.n?'<span class="muted">#'+esc(r.n)+'</span> ':'')+esc(r.name||"Unnamed")+'</td><td class="l">'+esc(r.team)+'</td>'+(S.scorerGrade==="all"?'<td class="l">'+esc(gname(r.grade))+'</td>':'')+cols.map(c=>'<td class="'+(c[2]?"pts":"")+'">'+r[c[1]]+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':'<div class="empty">'+empty+'</div>';
+  const tbl=(list,cols,empty)=>list.length?'<div class="tablewrap"><table><thead><tr><th>#</th><th class="l">Player</th><th class="l hm">Team</th>'+(S.scorerGrade==="all"?'<th class="l hm">Grade</th>':'')+cols.map(c=>'<th>'+c[0]+'</th>').join("")+'</tr></thead><tbody>'+
+    list.slice(0,25).map((r,i)=>'<tr><td>'+(i+1)+'</td><td class="l team">'+(r.n?'<span class="muted">#'+esc(r.n)+'</span> ':'')+esc(r.name||"Unnamed")+'<div class="sm small muted">'+esc(r.team)+(S.scorerGrade==="all"?' · '+esc(gname(r.grade)):'')+'</div></td><td class="l hm">'+esc(r.team)+'</td>'+(S.scorerGrade==="all"?'<td class="l hm">'+esc(gname(r.grade))+'</td>':'')+cols.map(c=>'<td class="'+(c[2]?"pts":"")+'">'+r[c[1]]+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':'<div class="empty">'+empty+'</div>';
   return chips+
     '<section class="card stack"><h2>Most touchdowns</h2>'+tbl(tdRows,[["TD","td",1],["Conv pts","conv"],["Total pts","pts"]],"No touchdowns recorded yet. They appear here as referees log them.")+'</section>'+
     '<section class="card stack"><h2>Most points</h2>'+tbl(ptRows,[["Pts","pts",1],["TD","td"],["Conv pts","conv"]],"No points recorded yet.")+'</section>'+
